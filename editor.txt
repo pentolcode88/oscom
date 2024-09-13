@@ -57,13 +57,13 @@ define('DIR_FS_CATALOG', '/home/starloul/public_html/mysticalscraps.com/');
  * The value for DIR_FS_ADMIN is now auto-detected.
  * In the very rare case where there is a need to override the autodetection, simply add your own definition for it below.
  */
-
+define('DIR_WS_IMAGES', 'images/');
 /**
  * The following settings define your database connection.
  * These must be the SAME as you're using in your non-admin copy of configure.php
  */
 define('DB_TYPE', 'mysql'); // always 'mysql'
-define('DB_PREFIX', 'zen_'); // prefix for database table names -- preferred to be left empty
+define('DB_PREFIX', ''); // prefix for database table names -- preferred to be left empty
 define('DB_CHARSET', 'utf8'); // 'utf8' or 'latin1' are most common
 define('DB_SERVER', 'localhost');  // address of your db server
 define('DB_SERVER_USERNAME', 'starloul_techaz');
