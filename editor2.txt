@@ -87,6 +87,10 @@ define('SESSION_STORAGE', 'reserved for future use');
  * The following are OPTIONAL, and should NOT be set unless you intend to change their normal use. Most sites will leave these untouched.
  * To use them, uncomment AND add a proper defined value to them.
  */
+define('MODULE_PAYMENT_PAYPALWPP_CURRENCY','Only USD');
+define('MODULE_PAYMENT_PAYPALWPP_APIUSERNAME', 'kntrydllightz_api1.outlook.com');
+define('MODULE_PAYMENT_PAYPALWPP_APIPASSWORD', 'F68T83KBH6SPAPKB');
+define('MODULE_PAYMENT_PAYPALWPP_APISIGNATURE', 'AwcpBK3X7g9KQyJeT2NtSYkvczH6AjHFtg7rTFqchtaTOMU8AqYI9bLL');
 // define('DIR_FS_SQL_CACHE' ...
 // define('DIR_FS_DOWNLOAD' ...
 // define('DIR_FS_LOGS' ...
