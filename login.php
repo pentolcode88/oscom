@@ -91,7 +91,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo TITLE; ?></title>
+<title><?php echo 'Admin - '. HTTP_COOKIE_DOMAIN  ; ?></title>
+<link rel="shortcut icon" href="../../images/favicon.ico">
+
+
 <script type="text/javascript" src="includes/prototype.js"></script>
 <link rel="stylesheet" type="text/css" href="includes/stylesheet.css" />
 <style type="text/css">
