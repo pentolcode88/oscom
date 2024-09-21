@@ -333,6 +333,65 @@ if (isset($_GET['action'])) {
       }
       tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters), 'NONSSL'));
       break;
+      
+            /*ITSZ: Cart popup at product details page part 4/4 START*/
+      case 'add_product_ajax' :
+          if (!isset($_POST['id'])) $_POST['id'] = '';
+          if (isset($_POST['products_id']) && is_numeric($_POST['products_id'])) {
+              if ( isset($_SESSION['customer_id']) ) tep_db_query("delete from " . TABLE_WISHLIST . " WHERE customers_id=$customer_id AND products_id='".$_POST['products_id']."'");
+              if (isset($_POST['sub_products_qty'])) {
+                  $i = 0;
+                  $sub_products_qty = $_POST['sub_products_qty'];
+                  foreach ($_POST['sub_products_id'] as $sub_products_id) {
+                      if ($sub_products_qty[$i] > 0) {
+                          // if sub product attributes are not enabled, do not process them
+                          if (defined('PRODUCT_INFO_SUB_PRODUCT_ATTRIBUTES') && PRODUCT_INFO_SUB_PRODUCT_ATTRIBUTES == 'True' ) {
+                              $attributes = isset($_POST['id'][$sub_products_id]) ? $_POST['id'][$sub_products_id] : '';
+                          } else {
+                              $attributes = isset($_POST['id']) ? $_POST['id'] : '';
+                          }
+                          $cart->add_cart($sub_products_id, $cart->get_quantity(tep_get_uprid($sub_products_id, $attributes)) + $sub_products_qty[$i], $attributes);
+                      }
+                      $i++;
+                  }
+              } else {
+                  // the sub product attributes constant determines the name parameter format
+                  if (defined('PRODUCT_INFO_SUB_PRODUCT_ATTRIBUTES') && PRODUCT_INFO_SUB_PRODUCT_ATTRIBUTES == 'True' ) {
+                      $attributes = isset($_POST['id'][$_POST['products_id']]) ? $_POST['id'][$_POST['products_id']] : '';
+                  } else {
+                      $attributes = isset($_POST['id']) ? $_POST['id'] : '';
+                  }
+                  $cart->add_cart($_POST['products_id'], $cart->get_quantity(tep_get_uprid($_POST['products_id'], $attributes)) + $_POST['cart_quantity'], $attributes);
+              }
+          }
+          //See include/modules/add_to_cart_popup.php
+          if(isset($_POST['isajax'])){
+              $products_id = $_POST['products_id'];
+              $quantity = $_POST['cart_quantity'];
+              $sql_product = "SELECT * 
+                    FROM products 
+                         LEFT JOIN products_description  
+                                ON (products.products_id = products_description.products_id)
+                    WHERE products.products_id = ".$products_id;
+              $result_product=mysql_query($sql_product) or die(mysql_error());
+
+              $row_product = tep_db_fetch_array($result_product);
+              $list_price = number_format($row_product['products_price'], 2);
+              $product_name = remove_accent($row_product['products_name']);
+              $cart_total = $currencies->format($cart->show_total());
+              $current_product_qty = $cart->get_quantity($products_id);
+              $current_product_total = $currencies->format($current_product_qty * $list_price);
+              $product_image = "images/".tep_get_products_image($products_id);
+              echo $cart->count_contents().'|'.$product_name.'|'.$list_price.'|'.$quantity.'|'.$cart_total.'|'.$current_product_qty.'|'.$current_product_total.'|'.$product_image ;
+              die();
+          }
+          else
+          {
+              tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters), 'NONSSL'));
+          }
+
+          break;
+      /*ITSZ: Cart popup at product details page part 4/4 EOF*/
       // wishlist checkboxes
       case 'add_del_products_wishlist' : 
         //delete selected products from wishlist
