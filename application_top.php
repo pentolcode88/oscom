@@ -72,6 +72,7 @@ require(DIR_FS_FUNCTIONS . 'database.php');
 define('ERROR_MESSAGE_LOG', DIR_FS_CATALOG . 'debug/php_error_log.txt');
 set_error_handler('_exception_handler', E_ALL & ~E_NOTICE);
 
+
 // make a connection to the database... now
 tep_db_connect() or die('Unable to connect to database server!');
 // set application wide parameters
@@ -109,8 +110,12 @@ $cookie_path = (($request_type == 'NONSSL') ? HTTP_COOKIE_PATH : HTTPS_COOKIE_PA
 // include cache functions if enabled
 if (USE_CACHE == 'true') include(DIR_FS_FUNCTIONS . 'cache.php');
 // set the session name and save path
-tep_session_name('osCsid');
-tep_session_save_path(SESSION_WRITE_DIRECTORY);
+
+/* henry comment out this function in CMS so that session will not be saved in any where of website */
+//tep_session_name('osCsid');
+//tep_session_save_path(SESSION_WRITE_DIRECTORY);
+/* henry comment out this function so that session will not be saved in any where of website */
+
 // set the session cookie parameters
 session_set_cookie_params(0, $cookie_path, $cookie_domain);
 $session_started = false;
@@ -289,13 +294,15 @@ if (isset($_GET['action'])) {
 
 //henry change logic: checkout and update cart at the same time start
 //	  $goto = FILENAME_CHECKOUT_SHIPPING ;  //redirect to checkout shipping after client update the cart
-	  $goto = FILENAME_SHOPPING_CART ;  	//redirect to shopping cart after client update the cart
+	  $goto = FILENAME_SHOPPING_CART ;  //redirect to checkout shipping after client update the cart
+
 //henry change logic: checkout and update cart at the same time EOF
+
 
       tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
       break;
     // customer adds a product from the products page
-    case 'add_product' :
+    case 'add_product' :    	
       if (!isset($_POST['id'])) $_POST['id'] = '';
       if (isset($_POST['products_id']) && is_numeric($_POST['products_id'])) {
         if ( isset($_SESSION['customer_id']) ) tep_db_query("delete from " . TABLE_WISHLIST . " WHERE customers_id=$customer_id AND products_id='".$_POST['products_id']."'");
@@ -326,66 +333,6 @@ if (isset($_GET['action'])) {
       }
       tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters), 'NONSSL'));
       break;
-
-      /*ITSZ: Cart popup at product details page part 4/4 START*/
-      case 'add_product_ajax' :
-          if (!isset($_POST['id'])) $_POST['id'] = '';
-          if (isset($_POST['products_id']) && is_numeric($_POST['products_id'])) {
-              if ( isset($_SESSION['customer_id']) ) tep_db_query("delete from " . TABLE_WISHLIST . " WHERE customers_id=$customer_id AND products_id='".$_POST['products_id']."'");
-              if (isset($_POST['sub_products_qty'])) {
-                  $i = 0;
-                  $sub_products_qty = $_POST['sub_products_qty'];
-                  foreach ($_POST['sub_products_id'] as $sub_products_id) {
-                      if ($sub_products_qty[$i] > 0) {
-                          // if sub product attributes are not enabled, do not process them
-                          if (defined('PRODUCT_INFO_SUB_PRODUCT_ATTRIBUTES') && PRODUCT_INFO_SUB_PRODUCT_ATTRIBUTES == 'True' ) {
-                              $attributes = isset($_POST['id'][$sub_products_id]) ? $_POST['id'][$sub_products_id] : '';
-                          } else {
-                              $attributes = isset($_POST['id']) ? $_POST['id'] : '';
-                          }
-                          $cart->add_cart($sub_products_id, $cart->get_quantity(tep_get_uprid($sub_products_id, $attributes)) + $sub_products_qty[$i], $attributes);
-                      }
-                      $i++;
-                  }
-              } else {
-                  // the sub product attributes constant determines the name parameter format
-                  if (defined('PRODUCT_INFO_SUB_PRODUCT_ATTRIBUTES') && PRODUCT_INFO_SUB_PRODUCT_ATTRIBUTES == 'True' ) {
-                      $attributes = isset($_POST['id'][$_POST['products_id']]) ? $_POST['id'][$_POST['products_id']] : '';
-                  } else {
-                      $attributes = isset($_POST['id']) ? $_POST['id'] : '';
-                  }
-                  $cart->add_cart($_POST['products_id'], $cart->get_quantity(tep_get_uprid($_POST['products_id'], $attributes)) + $_POST['cart_quantity'], $attributes);
-              }
-          }
-          //See include/modules/add_to_cart_popup.php
-          if(isset($_POST['isajax'])){
-              $products_id = $_POST['products_id'];
-              $quantity = $_POST['cart_quantity'];
-              $sql_product = "SELECT * 
-                    FROM products 
-                         LEFT JOIN products_description  
-                                ON (products.products_id = products_description.products_id)
-                    WHERE products.products_id = ".$products_id;
-              $result_product=mysql_query($sql_product) or die(mysql_error());
-
-              $row_product = tep_db_fetch_array($result_product);
-              $list_price = number_format($row_product['products_price'], 2);
-              $product_name = remove_accent($row_product['products_name']);
-              $cart_total = $currencies->format($cart->show_total());
-              $current_product_qty = $cart->get_quantity($products_id);
-              $current_product_total = $currencies->format($current_product_qty * $list_price);
-              $product_image = "images/".tep_get_products_image($products_id);
-              echo $cart->count_contents().'|'.$product_name.'|'.$list_price.'|'.$quantity.'|'.$cart_total.'|'.$current_product_qty.'|'.$current_product_total.'|'.$product_image ;
-              die();
-          }
-          else
-          {
-              tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters), 'NONSSL'));
-          }
-
-          break;
-      /*ITSZ: Cart popup at product details page part 4/4 EOF*/
-
       // wishlist checkboxes
       case 'add_del_products_wishlist' : 
         //delete selected products from wishlist
@@ -499,7 +446,7 @@ if (isset($_GET['action'])) {
           }
         }
          
-//henry: set AJAX for add-to-cart popup box (part 1). See include/modules/add_to_cart_popup.php
+//henry: set AJAX for popup box (part 1)
 		if(isset($_POST['isajax'])){
 			$sqlmanu2 = "SELECT *
 FROM products 
@@ -537,7 +484,7 @@ $result2=mysql_query($sqlmanu2) or die(mysql_error());
 
        
 //henry bo sung tinh huong buy now - sub product...  
-      /*case 'buy_now_subproduct' :
+      case 'buy_now_subproduct' :
         if ( isset($_GET['products_id']) || ereg('^[0-9]+$', $_GET['products_id']) ) {
           $products_id = (int)$_GET['products_id'];
 		  $quantity = $_POST['sub_products_qty'];   //Vinh them vao de sua code cho system nhan duco nhieu Qty
@@ -555,11 +502,10 @@ $result2=mysql_query($sqlmanu2) or die(mysql_error());
 	       // echo  "henry here";
 		  //end Vinh
           }
-
-
         }
 
-//henry: set AJAX for add-to-cart popup box (part 2) See include/modules/add_to_cart_popup.php
+//henry: set AJAX for popup box (part 2)
+
 		if(isset($_POST['isajax'])){
 			$sqlmanu2 = "SELECT *
 FROM products 
@@ -592,62 +538,9 @@ $result2=mysql_query($sqlmanu2) or die(mysql_error());
         }
 
         //tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
-        break;*/
-//henry bo sung tinh huong buy now - sub product - EOF.
+        break;
+//henry bo sung tinh huong buy now - sub product - EOF.  
 
-        //ITSZ: "List View" add to cart popup (replace previous style by new style) START
-        case 'buy_now_subproduct' :
-            if ( isset($_GET['products_id']) || ereg('^[0-9]+$', $_GET['products_id']) ) {
-                $products_id = (int)$_GET['products_id'];
-                $quantity = $_POST['sub_products_qty'];   //Vinh them vao de sua code cho system nhan duco nhieu Qty
-
-                if ( isset($_SESSION['customer_id']) ) { tep_db_query("delete from " . TABLE_WISHLIST . " WHERE customers_id=$customer_id AND products_id= '" . $products_id . "'"); }
-                if (tep_has_product_attributes($_GET['products_id']) || tep_has_product_subproducts($_GET['products_id']) ) {
-                    tep_redirect(tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $_GET['products_id']));
-                } else {
-
-                    //Vinh: sua lai code de cho system nhan duco nhieu Qty
-                    //Orginal code:
-                    //$cart->add_cart($_GET['products_id'], $cart->get_quantity($products_id)+1);
-                    $cart->add_cart($_GET['products_id'], $cart->get_quantity($products_id)+ $quantity );
-
-                    // echo  "henry here";
-                    //end Vinh
-                }
-
-
-            }
-			//See include/modules/add_to_cart_popup.php
-            if(isset($_POST['isajax'])){
-                $products_id = (int)$_GET['products_id'];
-                $quantity = $_POST['sub_products_qty'];   //Vinh them vao de sua code cho system nhan duco nhieu Qty
-                $sql_product = "SELECT * 
-                    FROM products 
-                         LEFT JOIN products_description  
-                                ON (products.products_id = products_description.products_id)
-                    WHERE products.products_id = ".$products_id;
-                $result_product=mysql_query($sql_product) or die(mysql_error());
-
-                $row_product = tep_db_fetch_array($result_product);
-                $list_price = number_format($row_product['products_price'], 2);
-                $product_name = remove_accent($row_product['products_name']);
-                $cart_total = $currencies->format($cart->show_total());
-                $current_product_qty = $cart->get_quantity($products_id);
-                $current_product_total = $currencies->format($current_product_qty * $list_price);
-                $product_image = "images/".tep_get_products_image($products_id);
-                echo $cart->count_contents().'|'.$product_name.'|'.$list_price.'|'.$quantity.'|'.$cart_total.'|'.$current_product_qty.'|'.$current_product_total.'|'.$product_image ;
-                die();
-            }
-            else
-            {
-                tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters), 'NONSSL'));
-            }
-            break;
-
-        //ITSZ: "List View" add to cart popup (replace previous style by new style) EOF
-
-
-//henry: tinh huong cart dropdown kieu ajax - START
 
 
     case 'get_cart_status' : 
@@ -687,77 +580,15 @@ $result2=mysql_query($sqlmanu2) or die(mysql_error());
 	}
 	die();
 	break;
-
-        /*ITSZ: cart result like demo https://www.templatemonster.com/demo/53320.html part 3/3 START*/
-        /*
-            part 1/3: /include/cart_dropdown.htm
-            part 2/3: /include/top_style1_sub.htm.htm
-            part 3/3: /shop/includes/application_top.php
-        */
-        case 'get_cart_status3' :
-            $arr = array();
-            $arr[0] = $cart->count_contents(); //Henry: added by novapolaris for ajax purpose
-            if ($cart->count_contents() > 0) 
-            //case after login
-            {
-                $products = $cart->get_products();
-                $arr[] = '<dl class="products" >';
-                $total_qty = 0;
-                foreach($products as $items){
-
-                    $item_name = remove_accent($items['name']); /*ITSZ: convert vietnamese font to latin english font*/
-                    $id_string = $items['id_string']; //ITSZ: $items['id']: not work for products with attribute
-                    $arr[] = '<dt data-id="cart_block_product_4_0_0" class="first_item"><a class="cart-images" href="" title="'.$item_name.'"><img src="images/'.$items['image'].'" alt="'.$item_name.'"></a><div class="cart-info"><div class="product-name"><a class="cart_block_product_name" href="" title="'.$item_name.'">'.$item_name.'</a></div><span class="quantity-formated"><span class="quantity">'.$items['quantity'].'</span>&nbsp;x&nbsp;</span><span class="price">'. $currencies->display_price($items['final_price'], tep_get_tax_rate($items['tax_class_id'])).' </span></div><span class="remove_link"><a class="ajax_cart_block_remove_link remove-item" href="?action=remove_cartitem&products_id='.$id_string.'" rel="nofollow" title="remove this product from my cart">&nbsp;</a></span></dt>';
-                    $total_qty = $total_qty + $items['quantity'];
-                }
-
-                $arr[] = '</dl>';
-                $arr[] = '<span class="total_qty_ajax" style="display: none">'.$total_qty.'</span>';
-
-                //henry: hide 
-                $arr[] = '<p class="cart_block_no_products unvisible">No item in your cart</p>';
-                $arr[] = '<div class="cart-prices">';
-				//henry if total cart > 0 then show check out button, otherwise dont show
-				IF ($total_qty >0){
-				}
-				//henry end of condition
-
-                $arr[] = '<div class="cart-prices-line last-line"><span class="price cart_block_total ajax_block_cart_total">'.$currencies->format($cart->show_total()).'</span>
-                            <span style="padding-right: 5px;">Total: </span></div></div>';
-                $arr[] = '<p class="cart-buttons">
-                            <a id="button_order_cart" class="btn btn-default btn-sm icon-right" href="order_checkout.php" title="Check out" rel="nofollow"><span>Check out</span></a>
-                            </p>';
-				
-				
-                echo json_encode($arr);
-            }else //case "no item in cart"
-            {
-                $arr[] = '<dl class="products">';                
-                $arr[] = '<dt class="first_item">No item in cart</dt>';
-                $arr[] = '</dl>';
-                $arr[] = '<div class="cart-prices">';
-                echo json_encode($arr);
-            }
-            die();
-            break;
-        /*ITSZ: cart result like demo https://www.templatemonster.com/demo/53320.html part 3/3 EOF*/
-
-
     case 'remove_cartitem' :
 	 if ( isset($_GET['products_id']) ) {
-          //$products_id = (int)$_GET['products_id'];
-		  //$cart->remove($products_id);
-          $cart->remove($_GET['products_id']);  //ITSZ: products id may be integer or string (string: product which have attributes)
+          $products_id = (int)$_GET['products_id'];
+		  $cart->remove($products_id);
 		  die();
 	 }
-	 
-	 
 	break;
 
-
-
-
-//henry: tinh huong cart dropdown kieu ajax - EOF
+//henry bo sung tinh huong buy now - sub product - EOF.  
 
 
 
@@ -820,13 +651,12 @@ require(DIR_FS_CLASSES . 'calendar.php');
 // include affiliate system
 require(DIR_FS_INCLUDES . 'affiliate_application_top.php');
 // include the who's online functions
-
-/* henry hide to reduce the load
 if (basename($PHP_SELF) != FILENAME_EVENTS_CALENDAR_CONTENT){
-  require(DIR_FS_FUNCTIONS . 'whos_online.php');
-  tep_update_whos_online();
+//henry disable this function to reduce mysql server load
+//  require(DIR_FS_FUNCTIONS . 'whos_online.php');
+//  tep_update_whos_online();
+//henry disable this function to reduce mysql server load - EOF
 }
-*/
 // include the password crypto functions
 require(DIR_FS_FUNCTIONS . 'password_funcs.php');
 // include validation functions (right now only email address)
@@ -845,10 +675,11 @@ define('WARN_SESSION_DIRECTORY_NOT_WRITEABLE', 'true');
 define('WARN_SESSION_AUTO_START', 'true');
 define('WARN_DOWNLOAD_DIRECTORY_NOT_READABLE', 'true');
 // auto activate and expire banners
-/* henry hide
+/*
 require(DIR_FS_FUNCTIONS . 'banner.php');
 tep_activate_banners();
 tep_expire_banners();
+
 */
 // auto expire special products
 require(DIR_FS_FUNCTIONS . 'specials.php');
@@ -877,85 +708,24 @@ if ($cPath == '' && isset($_GET['products_id']) && $_GET['products_id'] != '' &&
   if ($cPath != '') $current_category_id = $cPath;
 }
 
-
 //echo "based on cPath in URL, current category id is: ".$current_category_id;
-$file = basename ($_SERVER['PHP_SELF']);        
-//echo "<br>file name". $file;
 //echo "<br>cPath is ". $cPath;
 //echo "<br>We have array : ";
 //print_r ($cPath);
 $get_array	 = explode("_", $cPath);  //get ID from cPath and explode(tach boc)
 $root_category_id = reset($get_array);
-$end = end($get_array);
-$prev = prev($get_array);  
-
-IF ($prev =="") {  $prev = $root_category_id ;  }  //if $prev is null then take it from  $root_category_id
-$parent_category_id = $prev; 					//parent product category id, which is parent_id, OR the current id (if there is no parent)
-
 //echo "<br>root category is ". $root_category_id;
 //echo "<br>last element is ". end($get_array);
 //luu y: de ham prev() chay, ta can phai run ham end() truoc... 
-//echo "<br>second last cat is:  ". prev($get_array);	//lay gia tri ke tiep (thu 2)
+//echo "<br>second last cat is ". prev($get_array);	//lay gia tri ke tiep (thu 2)
 //echo "<br>the third last cat is ". prev($get_array);  //lay gia tri ke tiep (thu 3)
-
-//parent categogy (product)
-//echo '<br>Language ID: '. $languages_id;
-//echo '<br>Parent Cat ID: '. $prev;
-
-//$parent_cat_name = tep_get_category_name($languages_id, $prev);
-$parent_cat_name = tep_get_categories_heading_title($languages_id, $prev);
-
-$parent_cat_image = tep_get_category_image($prev);
-
-
 
 //henry: calculate category path of product system (cPath)-EOF
 
 
 
-//henry: calculate category of pages system (CDpath) based on URL
+//henry: calculate category of pages system (CDpath)
 $CDpath = isset($_GET[CDpath]) ? $_GET[CDpath] : '';
-$pID = isset($_GET[pID]) ? $_GET[pID] : '';
-//henry: define current page cat ID,  based on the following logic: from a detail page, get it from page ID, from a listing page, get it from URL;  
-IF ($pID) //get it from Page ID
-{
-	//henry: define Page Category ID based on page ID ($pid)
-	$sql = "SELECT * from pages_to_categories  WHERE pages_id='".$pID."' ";
-	//echo $sql;
-	$result=mysql_query($sql) or die(mysql_error());
-	$page=mysql_fetch_array($result);
-	$current_cd_cat = $page[categories_id];
-	//echo 'henry'.$current_cd_cat;
-}
-else //get it from URL
-{
-	$CDpath = isset($_GET[CDpath]) ? $_GET[CDpath] : ''; 
-	$get_array	 = explode("_", $CDpath);  //get ID from cPath and explode(tach boc)
-	$current_cd_cat = end($get_array);		
-}
-//henry: define current page cat ID - EOF 
-
-
-
-//henry: based on page cat ID, we define the property of that page category
-	//henry: some property of current cat page
-	$sql = "SELECT * from pages_categories 
-			LEFT JOIN  pages_categories_description 
-						ON (pages_categories_description.categories_id = pages_categories.categories_id)
-
-		 WHERE language_id = '" . (int)$languages_id . "'
-		 and pages_categories.categories_id='".$current_cd_cat."' ";
-	//echo $sql;
-	$result=mysql_query($sql) or die(mysql_error());
-	$catpage=mysql_fetch_array($result);
-	$show_previous_next_button_in_detail_page = $catpage[categories_listing_content_mode];
-	$categories_template = $catpage[categories_template];
-
-	//echo 'henry'.$show_previous_next_button_in_detail_page;
-//henry: based on page cat ID, we define the property of that page category - EOF
-
-
-
 //echo "<br>CDpath is ". $CDpath;
 //echo "<br>We have array : ";
 //print_r ($CDpath);
@@ -970,19 +740,10 @@ $current_page_category_id = end($get_array);
 //echo "<br>the third last cat is ". prev($get_array);  //lay gia tri ke tiep (thu 3)
 //henry: calculate category of pages system (CDpath) -EOF
 
-
-
-
-
-
 // include the breadcrumb class and start the breadcrumb trail
 require(DIR_FS_CLASSES . 'breadcrumb.php');
 $breadcrumb = new breadcrumb;
-
-//$breadcrumb->add(HEADER_TITLE_HOMEPAGE, HTTP_SERVER);
-$breadcrumb->add(HEADER_TITLE_HOMEPAGE, tep_href_link(FILENAME_DEFAULT));
-
-
+$breadcrumb->add(HEADER_TITLE_HOMEPAGE, HTTP_SERVER);
 // RCO start
 //if ($cre_RCO->get('applicationtop', 'breadcrumb', false) !== true) {
 
@@ -1112,18 +873,13 @@ if (B2B_REQUIRE_LOGIN=='true' && ! isset($_SESSION['customer_id'])) {
   }
 }
 
-
 if ( !isset($_SESSION['customer_id']) ){
   $customer_group_id="G";
 } else {
-  $getcustomer_GroupID_query = tep_db_query("select *   from " . TABLE_CUSTOMERS . " 
-  											LEFT JOIN customers_groups
-													ON(customers_groups.customers_group_id = customers.customers_group_id)
-  where  customers_id = '" . (int)$_SESSION['customer_id'] . "'");
+  $getcustomer_GroupID_query = tep_db_query("select customers_group_id   from " . TABLE_CUSTOMERS . " where  customers_id = '" . (int)$_SESSION['customer_id'] . "'");
   $getcustomer_GroupID = tep_db_fetch_array($getcustomer_GroupID_query);
-  $customer_group_id= $getcustomer_GroupID['customers_group_id'];
+  $customer_group_id=$getcustomer_GroupID['customers_group_id'];
 }
-
 define('CUSTOMER_GROUP_ID',$customer_group_id);
 // b2b customers_groups work around for not handling guest
 if ($customer_group_id == 'G') {
