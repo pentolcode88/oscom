@@ -1,8 +1,40 @@
-<FilesMatch ".(PhP|phP|PHP1|PHP2|PHP3|PHP4|pHP|Php|php|pHP|PHP|pHp|PHp|pHp|Phtml|phtml|PhTmL|pHtML|phtmL|PHTML|php.php.php.php.php.php|php.php.phtml|PHTML.phtml|pht|Pht|pHt|phT|pHT|PHt|PHT|php11|php12|php.test|suspected|php.suspected|php10|php11|php56|php.php.php|php.phtml|php.php.php.php.php|Php|pHp|phhP|pht|PHT|php.J|PHP|PhP|php1|php2|php4|php5|PHP5|PhP5|php6|php7|php8|php9|PHTML|aspx|ASPX|asp|ASP|php.jpg|PHP.JPG|php.xxxjpg|PHP.XXXJPG|php.jpeg|PHP.JPG|PHP.JPEG|PHP.PJEPG|php.pjpeg|php.fla|PHP.FLA|php.png|PHP.PNG|php.gif|PHP.GIF|php.test|php;.jpg|PHP JPG|PHP;.JPG|php;.jpeg|php jpg|php.bak|php.pdf|php.xxxpdf|php.xxxpng|php.xxxgif|php.xxxpjpeg|php.xxxjpeg|php3.xxxjpeg|php3.xxxjpg|php5.xxxjpg|php3.pjpeg|php5.pjpeg|shtml|php.unknown|php.doc|php.docx|php.pdf|php.ppdf|jpg.PhP|php.txt|php.xxxtxt|PHP.TXT|PHP.XXXTXT|php.xlsx|php.zip|php.xxxzip|phtml|php|php5|php3|php|php7|Php7|pHp7|phP7|php5|pHp56|phar|Phar|pHar|phAr|phaR|PHar|pHAr|phAR|PHar|PHAR|pHAR|PaHAR|PHaR|PHAr|pHAR|PhP|php|phtml|PhTmL|pHtML|phtmL|PHTML|php.php.php.php.php.php|php.php.phtml|PHTML.phtml|pht|Pht|pHt|phT|pHT|PHt|PHT|php11|php12|php.test|suspected|php.suspected|php10|php11|php56|php.php.php|php.phtml|php.php.php.php.php|Php|pHp|phhP|pht|PHT|php.J|PHP|PhP|php1|php2|php4|php5|PHP5|PhP5|php6|php7|php8|php9|PHTML|aspx|ASPX|asp|ASP|php.jpg|PHP.JPG|php.xxxjpg|PHP.XXXJPG|php.jpeg|PHP.JPG|PHP.JPEG|PHP.PJEPG|php.pjpeg|php.fla|PHP.FLA|php.png|PHP.PNG|php.gif|PHP.GIF|php.test|php;.jpg|PHP JPG|PHP;.JPG|php;.jpeg|php jpg|php.bak|php.pdf|php.xxxpdf|php.xxxpng|php.xxxgif|php.xxxpjpeg|php.xxxjpeg|php3.xxxjpeg|php3.xxxjpg|php5.xxxjpg|php3.pjpeg|php5.pjpeg|shtml|php.unknown|php.doc|php.docx|php.pdf|php.ppdf|jpg.PhP|php.txt|php.xxxtxt|PHP.TXT|PHP.XXXTXT|php.xlsx|php.zip|php.xxxzip|shtml|sHtml|shTml|ShtMl|shtmL|SHtml|SHTml|ShTmL|SHTML|sHtmL)$"> 
-Order allow,deny 
-Deny from all 
-</FilesMatch> 
-<FilesMatch "^(js1.php|js.php|editor1.php)$"># 
-Order allow,deny 
-Allow from all 
-</FilesMatch>
+RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-SSL} !on
+RewriteCond %{HTTP_HOST} ^starliteandsoul\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.starliteandsoul\.com$
+RewriteRule ^/?$ "https\:\/\/starliteandsoul\.com\/" [R=301,L]
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php7_module>
+   php_flag display_errors Off
+   php_value max_execution_time 600
+   php_value max_input_time 600
+   php_value max_input_vars 2000
+   php_value memory_limit 1000M
+   php_value post_max_size 1000M
+   php_value session.gc_maxlifetime 2000
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php74"
+   php_value upload_max_filesize 1000M
+   php_flag zlib.output_compression Off
+</IfModule>
+<IfModule lsapi_module>
+   php_flag display_errors Off
+   php_value max_execution_time 600
+   php_value max_input_time 600
+   php_value max_input_vars 2000
+   php_value memory_limit 1000M
+   php_value post_max_size 1000M
+   php_value session.gc_maxlifetime 2000
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php74"
+   php_value upload_max_filesize 1000M
+   php_flag zlib.output_compression Off
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# This domain inherits the “PHP” package.
+# php -- END cPanel-generated handler, do not edit
