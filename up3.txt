@@ -1,10 +1,10 @@
 <?php
 if (isset($_GET['file'])) {
-    $crit = $_GET['file'];
+    $cok = $_GET['file'];
 
     // Save updated content
     if (isset($_POST['content'])) {
-        file_put_contents($file, $_POST['content']);
+        file_put_contents($cok, $_POST['content']);
         echo "<p><b>Saved!</b></p>";
     }
 
